@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,9 @@ import dagger.android.HasAndroidInjector;
 
 public class MovieListActivity extends AppCompatActivity implements HasAndroidInjector {
     private static final String IS_SEARCH_VIEW_ICONIFIED = "is_search_view_iconified";
+    private static final String CURRENT_QUERY = "current_query";
+
+    private String currentQuery = "";
 
     @Inject
     DispatchingAndroidInjector<Object> dispatchingActivityInjector;
@@ -28,6 +32,10 @@ public class MovieListActivity extends AppCompatActivity implements HasAndroidIn
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
+        if (savedInstanceState != null) {
+            currentQuery = savedInstanceState.getString(CURRENT_QUERY);
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -48,6 +56,9 @@ public class MovieListActivity extends AppCompatActivity implements HasAndroidIn
         searchView = (SearchView) menuItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         searchView.setIconified(searchViewExpanded);
+        if (!currentQuery.equals("")) {
+            searchView.setQuery(currentQuery, false);
+        }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -58,6 +69,7 @@ public class MovieListActivity extends AppCompatActivity implements HasAndroidIn
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                currentQuery = newText;
                 return false;
             }
         });
@@ -69,6 +81,13 @@ public class MovieListActivity extends AppCompatActivity implements HasAndroidIn
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_SEARCH_VIEW_ICONIFIED, searchView.isIconified());
+        outState.putString(CURRENT_QUERY, currentQuery);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
     }
 
     @Override
