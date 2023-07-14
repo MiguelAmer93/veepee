@@ -12,14 +12,16 @@ android {
         testInstrumentationRunner "com.android.support.test.runner.AndroidJUnitRunner"
 
     }
-
+    viewBinding {
+        enabled = true
+    }
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
         }
         debugProguard {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -65,4 +67,10 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //swipe layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+
+    //Leak canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }

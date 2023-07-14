@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.vp.detail.DetailActivity
 import com.vp.detail.model.MovieDetail
 import com.vp.detail.service.DetailService
+import com.vp.detail.viewmodel.DetailsViewModel.LoadingState.ERROR
+import com.vp.detail.viewmodel.DetailsViewModel.LoadingState.LOADED
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
-import javax.security.auth.callback.Callback
 
 class DetailsViewModel @Inject constructor(private val detailService: DetailService) : ViewModel() {
 
@@ -23,22 +25,22 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
 
     fun state(): LiveData<LoadingState> = loadingState
 
-    fun fetchDetails() {
+    fun fetchDetails(movieId: String) {
         loadingState.value = LoadingState.IN_PROGRESS
-        detailService.getMovie(DetailActivity.queryProvider.getMovieId()).enqueue(object : Callback, retrofit2.Callback<MovieDetail> {
-            override fun onResponse(call: Call<MovieDetail>?, response: Response<MovieDetail>?) {
-                details.postValue(response?.body())
+        detailService.getMovie(movieId).enqueue(object: Callback<MovieDetail> {
+            override fun onResponse(call: Call<MovieDetail>, response: Response<MovieDetail>) {
+                details.postValue(response.body())
 
-                response?.body()?.title?.let {
+                response.body()?.title?.let {
                     title.postValue(it)
                 }
 
-                loadingState.value = LoadingState.LOADED
+                loadingState.value = LOADED
             }
 
-            override fun onFailure(call: Call<MovieDetail>?, t: Throwable?) {
+            override fun onFailure(call: Call<MovieDetail>, t: Throwable) {
                 details.postValue(null)
-                loadingState.value = LoadingState.ERROR
+                loadingState.value = ERROR
             }
         })
     }

@@ -15,11 +15,11 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
         }
         debugProguard {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     namespace 'com.vp.daggeraddons'
