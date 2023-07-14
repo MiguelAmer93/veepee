@@ -158,7 +158,8 @@ class ListFragment: Fragment(), GridPagingScrollListener.LoadMoreItemsListener, 
         val uri = Builder()
         uri.appendQueryParameter(DetailActivity.key, imdbID)
         intent.data = uri.build()
-        startActivity(intent)    }
+        startActivity(intent)
+    }
 
     fun submitSearchQuery(query: String) {
         currentQuery = query

@@ -2,6 +2,7 @@ package com.vp.movies.di
 
 import android.app.Application
 import com.vp.detail.di.DetailActivityModule
+import com.vp.favorites.di.FavoriteActivityModule
 import com.vp.list.di.MovieListActivityModule
 import com.vp.movies.MoviesApplication
 import dagger.BindsInstance

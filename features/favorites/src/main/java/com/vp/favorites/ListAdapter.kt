@@ -1,4 +1,4 @@
-package com.vp.list
+package com.vp.favorites
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
-import com.vp.list.ListAdapter.ListViewHolder
-import com.vp.list.databinding.ItemListBinding
-import com.vp.list.model.ListItem
+import com.vp.favorites.ListAdapter.ListViewHolder
+import com.vp.favorites.database.entities.PosterEntity
+import com.vp.favorites.databinding.ItemListBinding
 
 class ListAdapter: Adapter<ListViewHolder>() {
     companion object {
@@ -16,7 +16,7 @@ class ListAdapter: Adapter<ListViewHolder>() {
         private const val NO_IMAGE = "N/A"
     }
 
-    private var listItems: MutableList<ListItem> = mutableListOf()
+    private var listItems: MutableList<PosterEntity> = mutableListOf()
 
     private lateinit var binding: ItemListBinding
 
@@ -25,8 +25,6 @@ class ListAdapter: Adapter<ListViewHolder>() {
             //DO NOTHING
         }
     }
-
-    private var onItemClickListener: OnItemClickListener = EMPTY_ON_ITEM_CLICK_LISTENER
 
     interface OnItemClickListener {
 
@@ -52,32 +50,13 @@ class ListAdapter: Adapter<ListViewHolder>() {
         }
     }
 
-    fun setItems(listItems: List<ListItem>?) {
+    fun setItems(listItems: List<PosterEntity>?) {
         this.listItems = listItems?.toMutableList() ?: mutableListOf()
         notifyDataSetChanged()
     }
-
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
-        if (onItemClickListener != null) {
-            this.onItemClickListener = onItemClickListener
-        } else {
-            this.onItemClickListener = EMPTY_ON_ITEM_CLICK_LISTENER
-        }
-    }
-
-    fun clearItems() {
-        listItems.clear()
-    }
-
     override fun getItemCount() = listItems.size
 
-    inner class ListViewHolder(val binding: ItemListBinding): RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        init {
-            binding.root.setOnClickListener(this)
-        }
+    inner class ListViewHolder(val binding: ItemListBinding): RecyclerView.ViewHolder(binding.root){
 
-        override fun onClick(p0: View?) {
-            onItemClickListener.onItemClick(listItems[adapterPosition].imdbID)
-        }
     }
 }

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -10,7 +12,9 @@ android {
         testInstrumentationRunner "com.android.support.test.runner.AndroidJUnitRunner"
 
     }
-
+    viewBinding {
+        enabled = true
+    }
     buildTypes {
         debug {
             minifyEnabled true
@@ -22,13 +26,22 @@ android {
     }
     namespace 'com.vp.favorites'
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
+    implementation project(':dagger.addons')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayout"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerView"
+    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
 
+    //swipe layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     //support
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
 
@@ -36,4 +49,23 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //dagger
+    implementation "com.google.dagger:dagger:$rootProject.dagger"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.dagger"
+    implementation "com.google.dagger:dagger-android:$rootProject.dagger"
+    implementation("com.google.dagger:dagger-android-support:$rootProject.dagger")
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger"
+
+    //architecture components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+
+    //Room
+    implementation "androidx.room:room-ktx:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    kapt "com.github.bumptech.glide:compiler:$rootProject.glide"
 }
